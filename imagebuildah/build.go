@@ -727,9 +727,9 @@ func NewExecutor(store storage.Store, options BuildOptions, mainNode *parser.Nod
 	}
 	if exec.log == nil {
 		stepCounter := 0
-		exec.log = func(format string, stages int, args ...interface{}) {
+		exec.log = func(format string, args ...interface{}) {
 			stepCounter++
-			prefix := fmt.Sprintf("STEP %d/%d: ", stepCounter, len(stage.Node.Children))
+			prefix := fmt.Sprintf("STEP %d/%d: ", stepCounter, len(mainNode.Children))
 			suffix := "\n"
 			fmt.Fprintf(exec.err, prefix+format+suffix, args...)
 		}
