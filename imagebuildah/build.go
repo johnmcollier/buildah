@@ -986,7 +986,7 @@ func (s *StageExecutor) Execute(ctx context.Context, stage imagebuilder.Stage, b
 		}
 		logrus.Debugf(commitMessage)
 		if !s.executor.quiet {
-			s.executor.log(commitMessage, len(children))
+			s.executor.log(commitMessage)
 		}
 	}
 	logImageID := func(imgID string) {
@@ -1026,7 +1026,7 @@ func (s *StageExecutor) Execute(ctx context.Context, stage imagebuilder.Stage, b
 		}
 		logrus.Debugf("Parsed Step: %+v", *step)
 		if !s.executor.quiet {
-			s.executor.log("%s", len(children), step.Original)
+			s.executor.log("%s", step.Original)
 		}
 
 		// Check if there's a --from if the step command is COPY or
