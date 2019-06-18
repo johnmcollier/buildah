@@ -92,7 +92,7 @@ type BuildOptions struct {
 	// Log is a callback that will print a progress message.  If no value
 	// is supplied, the message will be sent to Err (or os.Stderr, if Err
 	// is nil) by default.
-	Log func(format string, args ...interface{})
+	Log func(format string, int stages, args ...interface{})
 	// In is connected to stdin for RUN instructions.
 	In io.Reader
 	// Out is a place where non-error log messages are sent.
@@ -189,7 +189,7 @@ type Executor struct {
 	output                         string
 	outputFormat                   string
 	additionalTags                 []string
-	log                            func(format string, args ...interface{})
+	log                            func(format string, stages int, args ...interface{})
 	in                             io.Reader
 	out                            io.Writer
 	err                            io.Writer
@@ -791,7 +791,7 @@ func (s *StageExecutor) prepare(ctx context.Context, stage imagebuilder.Stage, f
 	if initializeIBConfig && rebase {
 		logrus.Debugf("FROM %#v", displayFrom)
 		if !s.executor.quiet {
-			s.executor.log("FROM %s", displayFrom)
+			s.executor.log("FROM %s", len(stage.Node.Children), displayFrom)
 		}
 	}
 
@@ -986,7 +986,7 @@ func (s *StageExecutor) Execute(ctx context.Context, stage imagebuilder.Stage, b
 		}
 		logrus.Debugf(commitMessage)
 		if !s.executor.quiet {
-			s.executor.log(commitMessage)
+			s.executor.log(commitMessage, len(children))
 		}
 	}
 	logImageID := func(imgID string) {
