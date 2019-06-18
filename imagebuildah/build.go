@@ -727,9 +727,9 @@ func NewExecutor(store storage.Store, options BuildOptions, mainNode *parser.Nod
 	}
 	if exec.log == nil {
 		stepCounter := 0
-		exec.log = func(format string, args ...interface{}) {
+		exec.log = func(format string, stages int, args ...interface{}) {
 			stepCounter++
-			prefix := fmt.Sprintf("STEP %d: ", stepCounter)
+			prefix := fmt.Sprintf("STEP %d/%d: ", stepCounter, stages)
 			suffix := "\n"
 			fmt.Fprintf(exec.err, prefix+format+suffix, args...)
 		}
@@ -1026,7 +1026,7 @@ func (s *StageExecutor) Execute(ctx context.Context, stage imagebuilder.Stage, b
 		}
 		logrus.Debugf("Parsed Step: %+v", *step)
 		if !s.executor.quiet {
-			s.executor.log("%s/%s", step.Original, len(children))
+			s.executor.log("%s", len(children), step.Original)
 		}
 
 		// Check if there's a --from if the step command is COPY or
