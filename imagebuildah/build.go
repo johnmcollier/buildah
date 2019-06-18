@@ -92,7 +92,7 @@ type BuildOptions struct {
 	// Log is a callback that will print a progress message.  If no value
 	// is supplied, the message will be sent to Err (or os.Stderr, if Err
 	// is nil) by default.
-	Log func(format string, int stages, args ...interface{})
+	Log func(format string, stages int, args ...interface{})
 	// In is connected to stdin for RUN instructions.
 	In io.Reader
 	// Out is a place where non-error log messages are sent.
