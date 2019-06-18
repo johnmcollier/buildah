@@ -87,7 +87,7 @@ func onBuild(builder *buildah.Builder) error {
 		commands := strings.Split(onBuildSpec, " ")
 		command := strings.ToUpper(commands[0])
 		args := commands[1:]
-		fmt.Fprintf(os.Stderr, "STEP %d: %s\n", ctr, onBuildSpec)
+		fmt.Fprintf(os.Stderr, "STEP %d\\%d: %s\n", ctr, len(builder.OnBuild()), onBuildSpec)
 		switch command {
 		case "ADD":
 		case "COPY":
