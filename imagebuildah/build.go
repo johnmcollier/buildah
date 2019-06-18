@@ -92,7 +92,7 @@ type BuildOptions struct {
 	// Log is a callback that will print a progress message.  If no value
 	// is supplied, the message will be sent to Err (or os.Stderr, if Err
 	// is nil) by default.
-	Log func(format string, stages int, args ...interface{})
+	Log func(format string, args ...interface{})
 	// In is connected to stdin for RUN instructions.
 	In io.Reader
 	// Out is a place where non-error log messages are sent.
@@ -189,7 +189,7 @@ type Executor struct {
 	output                         string
 	outputFormat                   string
 	additionalTags                 []string
-	log                            func(format string, stages int, args ...interface{})
+	log                            func(format string, args ...interface{})
 	in                             io.Reader
 	out                            io.Writer
 	err                            io.Writer
@@ -729,7 +729,7 @@ func NewExecutor(store storage.Store, options BuildOptions, mainNode *parser.Nod
 		stepCounter := 0
 		exec.log = func(format string, stages int, args ...interface{}) {
 			stepCounter++
-			prefix := fmt.Sprintf("STEP %d/%d: ", stepCounter, stages)
+			prefix := fmt.Sprintf("STEP %d/%d: ", stepCounter, len(stage.Node.Children))
 			suffix := "\n"
 			fmt.Fprintf(exec.err, prefix+format+suffix, args...)
 		}
@@ -791,7 +791,7 @@ func (s *StageExecutor) prepare(ctx context.Context, stage imagebuilder.Stage, f
 	if initializeIBConfig && rebase {
 		logrus.Debugf("FROM %#v", displayFrom)
 		if !s.executor.quiet {
-			s.executor.log("FROM %s", len(stage.Node.Children), displayFrom)
+			s.executor.log("FROM %s", displayFrom)
 		}
 	}
 
